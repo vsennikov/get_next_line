@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/24 18:31:19 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:30:58 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_list	*init_new(size_t buff_size)
 	return (node);
 }
 
-void	*free_lst(t_list **lst)
+void	free_lst(t_list **lst)
 {
 	t_list	*tmp;
 	t_list	*current;
@@ -55,5 +55,21 @@ void	*free_lst(t_list **lst)
 		free(tmp->buff);
 		free(tmp);
 	}
-	return (NULL);
+	*lst = NULL;
+	// return (NULL);
+}
+
+int	ft_lstsize(t_list *lst)
+{
+	int	i;
+
+	i = 0;
+	if (lst == NULL)
+		return (0);
+	while (lst != NULL)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
 }
