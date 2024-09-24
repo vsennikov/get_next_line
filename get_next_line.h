@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:17 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/24 14:24:44 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:14:49 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 5
 # endif
 
 typedef struct s_list
@@ -27,5 +27,5 @@ typedef struct s_list
 }	t_list;
 
 char	*get_next_line(int fd);
-char	*add_to_node(t_list **lst, int fd, size_t buff_size);
+char	*add_to_node(t_list **lst, int fd, size_t buff_size, t_list *rest_of);
 #endif

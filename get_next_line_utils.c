@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/24 14:35:07 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:54:26 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_list	*init_new(size_t buff_size)
 	if (node->buff == NULL)
 		return (NULL);
 	node->buff[buff_size] = '\0';
+	node->next = NULL;
 	return (node);
 }
 
@@ -54,7 +55,6 @@ void	*free_lst(t_list **lst)
 		free(tmp->buff);
 		free(tmp);
 	}
-	lst = NULL;
 	return (NULL);
 }
 
@@ -74,11 +74,10 @@ int	check_for_nl_end(char *buff, size_t buff_size)
 	return (0);
 }
 
-char	*get_line(t_list **lst, size_t buff_size)
+char	*create_line(t_list **lst, size_t buff_size)
 {
 	char	*line;
 	int		i;
-	int		y;
 	t_list	*current;
 
 	current = *lst;
@@ -91,6 +90,15 @@ char	*get_line(t_list **lst, size_t buff_size)
 	line = malloc(i * buff_size + 1);
 	if (line == NULL)
 		return (NULL);
+	return (line);
+}
+
+char *fullfill_line(t_list **lst, char *line)
+{
+	int		i;
+	int		y;
+	t_list	*current;
+
 	current = *lst;
 	y = 0;
 	while (current != NULL)
@@ -100,26 +108,59 @@ char	*get_line(t_list **lst, size_t buff_size)
 		{
 			if (current->buff[i] == '\n')
 			{
-				line[y] = '\n';
-				y++;
+				line[y++] = '\n';
 				line[y] = '\0';
 				return (line);
 			}
-			line[y] = current->buff[i];
-			y++;
-			i++;
+			line[y++] = current->buff[i++];
 		}
 		current = current->next;
 	}
 	line[y] = '\0';
-	free_lst(lst);
 	return (line);
 }
 
-char	*add_to_node(t_list **lst, int fd, size_t buff_size)
+char	*get_line(t_list **lst, size_t buff_size)
+{
+	char	*line;
+	int		i;
+	int		y;
+	t_list	*current;
+
+	line = create_line(lst, buff_size);
+	if (line == NULL)
+		return (NULL);
+	return (fullfill_line(lst, line));
+}
+
+void	save_rest_from_buff(t_list *rest_of, t_list **lst)
+{
+	int	i;
+	int	j;
+	t_list	*current;
+
+	i = 0;
+	current = *lst;
+	while (current->next != NULL)
+		current = current->next;
+	while (current->buff[i] != '\n')
+		i++;
+	j = i;
+	while (current->buff[j] != '\0')
+		j++;
+	rest_of = init_new(j - i);
+	if (rest_of == NULL)
+		return ;
+	j = 0;
+	while (current->buff[i] != '\0')
+		rest_of->buff[j++] = current->buff[i++];
+}
+
+char	*add_to_node(t_list **lst, int fd, size_t buff_size, t_list *rest_of)
 {
 	t_list	*node;
 	int		check_flag;
+	char	*line;
 
 	check_flag = 0;
 	while (check_flag != 1 && check_flag != 2)
@@ -131,5 +172,8 @@ char	*add_to_node(t_list **lst, int fd, size_t buff_size)
 		ft_lstadd_back(lst, node);
 		check_flag = check_for_nl_end(node->buff, buff_size);
 	}
-	return (get_line(lst, buff_size));
+	line = get_line(lst, buff_size);
+	save_rest_from_buff(rest_of, lst);
+	free_lst(lst);
+	return (line);
 }
