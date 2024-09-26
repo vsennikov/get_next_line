@@ -6,13 +6,13 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 16:01:03 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:15:19 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void *free_all(char *saver, char *buffer)
+void	*free_all(char *saver, char *buffer)
 {
 	if (buffer == NULL && saver != NULL)
 		free(saver);
@@ -22,13 +22,13 @@ void *free_all(char *saver, char *buffer)
 		return (NULL);
 	else
 	{
-		free (saver);
-		free (buffer);
+		free(saver);
+		free(buffer);
 	}
 	return (NULL);
 }
 
-char	*read_file(int fd, size_t buff_size, char **saver)
+char *read_file(int fd, size_t buff_size, char **saver)
 {
 	int		found_nl;
 	int		end_of_file;
@@ -53,42 +53,47 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 		else
 			free(buff);
 	}
-	if (*saver[0] != '\0')
+	if (*saver != NULL && *saver[0] != '\0')
 	{
 		line = return_line(*saver);
 		if (line == NULL)
 			return (free_all(*saver, NULL));
 		*saver = reorganise_saver(*saver);
 	}
-	else 
+	else
 	{
 		line = NULL;
-		free (*saver);
+		free(*saver);
+		*saver = NULL;
 	}
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	size_t			buff_s;
-	static char		*saver;
-	char			*line;
+	size_t		buff_s;
+	static char	*saver;
+	char		*line;
 
 	buff_s = BUFFER_SIZE;
 	line = NULL;
 	if (fd < 0 || buff_s == 0 || read(fd, line, 0) == -1)
+	{
+		if (saver != NULL)
+		{
+			free (saver);
+			saver = NULL;
+		}
 		return (NULL);
+	}
 	line = read_file(fd, buff_s, &saver);
 	if (line != NULL && line[0] == '\0')
 	{
+		free(line);
+		free(saver);
 		return (NULL);
-		free (line);
-		free (saver);
 	}
 	else if (line == NULL)
-	{
 		return (NULL);
-		free (saver);
-	}
 	return (line);
 }

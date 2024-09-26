@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 15:54:53 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:15:13 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_nl(char *buff)
 char	*init_buf(size_t buff_size)
 {
 	char	*buff;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	buff = (char *)malloc(buff_size * sizeof(char) + 1);
