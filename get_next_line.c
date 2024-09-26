@@ -6,11 +6,27 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 14:38:59 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:01:03 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void *free_all(char *saver, char *buffer)
+{
+	if (buffer == NULL && saver != NULL)
+		free(saver);
+	else if (saver == NULL && buffer != NULL)
+		free(buffer);
+	else if (buffer == NULL && saver == NULL)
+		return (NULL);
+	else
+	{
+		free (saver);
+		free (buffer);
+	}
+	return (NULL);
+}
 
 char	*read_file(int fd, size_t buff_size, char **saver)
 {
@@ -25,22 +41,30 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 	{
 		buff = init_buf(buff_size);
 		if (buff == NULL)
-			return (NULL);
+			return (free_all(*saver, buff));
 		end_of_file = read(fd, buff, buff_size);
 		found_nl = check_nl(buff);
 		if (end_of_file != 0)
 		{
 			*saver = transfer_str(*saver, buff, end_of_file);
 			if (*saver == NULL)
-				return (NULL);
+				return (free_all(*saver, buff));
 		}
 		else
 			free(buff);
 	}
-	line = return_line(*saver);
-	if (line == NULL)
-		return (NULL);
-	*saver = reorganise_saver(*saver);
+	if (*saver[0] != '\0')
+	{
+		line = return_line(*saver);
+		if (line == NULL)
+			return (free_all(*saver, NULL));
+		*saver = reorganise_saver(*saver);
+	}
+	else 
+	{
+		line = NULL;
+		free (*saver);
+	}
 	return (line);
 }
 

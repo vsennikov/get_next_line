@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 14:37:30 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:54:53 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_nl(char *buff)
 	int	i;
 
 	i = 0;
-	while (buff[i] != '\0')
+	while (buff[i])
 	{
 		if (buff[i] == '\n')
 			return (1);
@@ -29,11 +29,14 @@ int	check_nl(char *buff)
 char	*init_buf(size_t buff_size)
 {
 	char	*buff;
+	int		i;
 
+	i = 0;
 	buff = (char *)malloc(buff_size * sizeof(char) + 1);
 	if (buff == NULL)
 		return (NULL);
-	buff[buff_size] = '\0';
+	while (i <= buff_size)
+		buff[i++] = 0;
 	return (buff);
 }
 
@@ -70,18 +73,18 @@ char	*transfer_str(char *old, char *buff, size_t buff_size)
 char	*return_line(char *saver)
 {
 	int		i;
-	int		j;
 	char	*line;
 
 	i = 0;
-	j = 0;
 	if (saver == NULL)
 		return (NULL);
 	while (saver[i] && saver[i] != '\n')
 		i++;
+	if (check_nl(saver) == 1)
+		i++;
 	line = (char *)malloc(i * sizeof(char) + 1);
 	if (line == NULL)
-		return (line);
+		return (NULL);
 	line[i] = '\0';
 	i = 0;
 	while (saver[i] && saver[i] != '\n')
@@ -101,7 +104,6 @@ char	*reorganise_saver(char *saver)
 	char	*new_saver;
 
 	i = 0;
-	j = 0;
 	while (saver[i] != '\n' && saver[i])
 		i++;
 	if (check_nl(saver) == 1)
@@ -116,5 +118,6 @@ char	*reorganise_saver(char *saver)
 	while (saver[i])
 		new_saver[j++] = saver[i++];
 	new_saver[j] = '\0';
+	free (saver);
 	return (new_saver);
 }
