@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 16:15:13 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:19:43 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*reorganise_saver(char *saver)
 	char	*new_saver;
 
 	i = 0;
-	while (saver[i] != '\n' && saver[i])
+	while (saver[i] && saver[i] != '\n')
 		i++;
 	if (check_nl(saver) == 1)
 		i += 1;
