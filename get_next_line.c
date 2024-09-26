@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/25 17:47:02 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:26:27 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ char	*transfer_str(char *old, char *buff, int call, size_t buff_size)
 
 	j = 0;
 	i = 0;
-	saver = init_buf(buff_size, call);
+	while (old != NULL && old[i])
+		i++;
+	saver = init_buf(buff_size + (size_t) i, 1);
 	if (saver == NULL)
 		return (NULL);
+	i = 0;
 	if (old != NULL)
 	{
 		while (old[i])
@@ -58,8 +61,9 @@ char	*transfer_str(char *old, char *buff, int call, size_t buff_size)
 		}
 		free(old);
 	}
-	while (buff[j])
+	while (j < buff_size)
 		saver[i++] = buff[j++];
+	saver[i] = '\0';
 	free(buff);
 	return (saver);
 }
@@ -72,19 +76,20 @@ char	*return_line(char *saver)
 
 	i = 0;
 	j = 0;
-	while (saver[i] != '\n')
+	while (saver[i] != '\n' && saver[i])
 		i++;
 	line = (char *)malloc(i * sizeof(char) + 1);
 	if (line == NULL)
 		return (line);
 	line[i] = '\0';
 	i = 0;
-	while (saver[i] != '\n')
+	while (saver[i] != '\n' && saver[i])
 	{
 		line[i] = saver[i];
 		i++;
 	}
-	line[i] = '\n';
+	if (check_nl(saver) == 1)
+		line[i] = '\n';
 	return (line);
 }
 
@@ -96,9 +101,10 @@ char	*reorganise_saver(char *saver)
 
 	i = 0;
 	j = 0;
-	while (saver[i] != '\n')
+	while (saver[i] != '\n' && saver[i])
 		i++;
-	i += 1;
+	if (check_nl(saver) == 1)
+		i += 1;
 	j = i;
 	while (saver[j])
 		j++;
@@ -125,14 +131,19 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 	end_of_file = -1;
 	while (found_nl != 1 && end_of_file != 0)
 	{
-		buff = init_buf(buff_size, call);
+		buff = init_buf(buff_size, 1);
 		if (buff == NULL)
 			return (NULL);
 		end_of_file = read(fd, buff, buff_size);
 		found_nl = check_nl(buff);
-		*saver = transfer_str(*saver, buff, call, buff_size);
-		if (*saver == NULL)
-			return (NULL);
+		if (end_of_file != 0)
+		{
+			*saver = transfer_str(*saver, buff, call, end_of_file);
+			if (*saver == NULL)
+				return (NULL);
+		}
+		else
+			free(buff);
 		call++;
 	}
 	line = return_line(*saver);
@@ -151,5 +162,10 @@ char	*get_next_line(int fd)
 	if (fd < 0 || buff_s == 0 || read(fd, line, 0) == -1)
 		return (NULL);
 	line = read_file(fd, buff_s, &saver);
+	if (line[0] == '\0')
+	{
+		return (NULL);
+		free (line);
+	}
 	return (line);
 }
