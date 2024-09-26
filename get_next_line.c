@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 12:48:01 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:38:59 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 			free(buff);
 	}
 	line = return_line(*saver);
+	if (line == NULL)
+		return (NULL);
 	*saver = reorganise_saver(*saver);
 	return (line);
 }
@@ -53,10 +55,15 @@ char	*get_next_line(int fd)
 	if (fd < 0 || buff_s == 0 || read(fd, line, 0) == -1)
 		return (NULL);
 	line = read_file(fd, buff_s, &saver);
-	if (line[0] == '\0')
+	if (line != NULL && line[0] == '\0')
 	{
 		return (NULL);
 		free (line);
+		free (saver);
+	}
+	else if (line == NULL)
+	{
+		return (NULL);
 		free (saver);
 	}
 	return (line);

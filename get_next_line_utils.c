@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 12:49:12 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:37:30 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ char	*return_line(char *saver)
 
 	i = 0;
 	j = 0;
+	if (saver == NULL)
+		return (NULL);
 	while (saver[i] && saver[i] != '\n')
 		i++;
 	line = (char *)malloc(i * sizeof(char) + 1);
