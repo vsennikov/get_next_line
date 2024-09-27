@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/26 17:19:43 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:08:59 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,13 @@ char	*transfer_str(char *old, char *buff, size_t buff_size)
 	if (saver == NULL)
 		return (NULL);
 	i = 0;
-	if (old != NULL)
+	while (old != NULL && old[i])
 	{
-		while (old[i])
-		{
-			saver[i] = old[i];
-			i++;
-		}
-		free(old);
+		saver[i] = old[i];
+		i++;
 	}
+	if (old != NULL)
+		free(old);
 	j = 0;
 	while ((size_t) j < buff_size)
 		saver[i++] = buff[j++];
