@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/27 14:03:51 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/27 14:27:11 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ char	*check_for_end(char **saver, char *line)
 	{
 		line = return_line(*saver);
 		if (line == NULL)
-			return (free_all(saver, NULL));
+			return (free_all(saver, line));
 		*saver = reorganise_saver(*saver);
+		if (*saver == NULL)
+			return (free_all(saver, line));
 	}
 	else
 	{
@@ -69,7 +71,7 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 		found_nl = check_nl(buff);
 		if (end_of_file != 0)
 		{
-			*saver = transfer_str(*saver, buff, end_of_file);
+			*saver = transfer_str(saver, buff, end_of_file);
 			if (*saver == NULL)
 				return (free_all(saver, buff));
 		}
