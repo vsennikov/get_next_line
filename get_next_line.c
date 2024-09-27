@@ -6,11 +6,9 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/27 12:41:08 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:17:36 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "get_next_line.h"
 
 #include "get_next_line.h"
 
@@ -30,27 +28,26 @@ void	*free_all(char *saver, char *buffer)
 	return (NULL);
 }
 
-char	*check_for_end(char **saver, char *line, int *read_all)
+char	*check_for_end(char *saver, char *line)
 {
-	if (*saver != NULL && *saver[0] != '\0')
+	if (saver != NULL && saver[0] != '\0')
 	{
-		line = return_line(*saver);
+		line = return_line(saver);
 		if (line == NULL)
-			return (free_all(*saver, NULL));
-		*saver = reorganise_saver(*saver);
+			return (free_all(saver, NULL));
+		saver = reorganise_saver(saver);
 	}
 	else
 	{
 		line = NULL;
-		if (*saver != NULL)
-			free(*saver);
-		*saver = NULL;
-		read_all += 1;
+		if (saver != NULL)
+			free(saver);
+		saver = NULL;
 	}
 	return (line);
 }
 
-char	*read_file(int fd, size_t buff_size, char **saver, int *read_all)
+char	*read_file(int fd, size_t buff_size, char **saver, int read_all)
 {
 	int		found_nl;
 	int		end_of_file;
@@ -75,8 +72,7 @@ char	*read_file(int fd, size_t buff_size, char **saver, int *read_all)
 		else
 			free(buff);
 	}
-	line = NULL;
-	return (check_for_end(saver, line, read_all));
+	return (check_for_end(saver, line));
 }
 
 char	*get_next_line(int fd)
@@ -97,12 +93,12 @@ char	*get_next_line(int fd)
 		}
 		return (NULL);
 	}
-	line = read_file(fd, buff_s, &saver, &read_all);
+	line = read_file(fd, buff_s, &saver, read_all);
 	if (line != NULL && line[0] == '\0')
 		return (free_all(saver, line));
 	else if (line == NULL)
 		return (NULL);
-	if (read_all != 0)
+	if (read_all)
 		free(saver);
 	return (line);
 }
