@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/27 12:08:59 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/27 13:50:23 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ char	*return_line(char *saver)
 		i++;
 	if (check_nl(saver) == 1)
 		i++;
-	line = (char *)malloc(i * sizeof(char) + 1);
+	// line = (char *)malloc(i * sizeof(char) + 1);
+	line = NULL;
 	if (line == NULL)
 		return (NULL);
 	line[i] = '\0';
