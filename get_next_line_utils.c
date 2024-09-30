@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/30 12:49:41 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:07:06 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char	*reorganise_saver(char *saver)
 	new_saver = (char *)malloc(j * sizeof(char) + 1);
 	if (new_saver == NULL)
 	{
-		// free (saver);
+		free (saver);
 		return (NULL);
 	}
 	j = 0;
