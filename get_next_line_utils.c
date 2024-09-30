@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:27:05 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/27 14:29:27 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:49:41 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,22 @@ char	*transfer_str(char *old, char *buff, size_t buff_size)
 		i++;
 	saver = init_buf(buff_size + (size_t) i);
 	if (saver == NULL)
-		return (NULL);
-	i = 0;
-	while (old != NULL && old[i])
 	{
-		saver[i] = old[i];
-		i++;
+		if (old != NULL)
+			free(old);
+		return (NULL);
 	}
+	i = -1;
+	while (old != NULL && old[++i])
+		saver[i] = old[i];
 	if (old != NULL)
 		free(old);
 	j = 0;
+	if (i == -1)
+		i = 0;
 	while ((size_t) j < buff_size)
 		saver[i++] = buff[j++];
-	saver[i] = '\0';
-	free(buff);
-	return (saver);
+	return (saver[i] = '\0', free(buff), saver);
 }
 
 char	*return_line(char *saver)
@@ -81,7 +82,6 @@ char	*return_line(char *saver)
 	if (check_nl(saver) == 1)
 		i++;
 	line = (char *)malloc(i * sizeof(char) + 1);
-	// line = NULL;
 	if (line == NULL)
 		return (NULL);
 	line[i] = '\0';
@@ -110,10 +110,12 @@ char	*reorganise_saver(char *saver)
 	j = i;
 	while (saver[j])
 		j++;
-	// new_saver = (char *)malloc(j * sizeof(char) + 1);
-	new_saver = NULL;
+	new_saver = (char *)malloc(j * sizeof(char) + 1);
 	if (new_saver == NULL)
+	{
+		// free (saver);
 		return (NULL);
+	}
 	j = 0;
 	while (saver[i])
 		new_saver[j++] = saver[i++];

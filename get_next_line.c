@@ -6,11 +6,12 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/27 14:29:48 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:38:40 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
 
 void	*free_all(char **saver, char *buffer)
 {
