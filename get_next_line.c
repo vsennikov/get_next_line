@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/09/30 13:07:39 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:02:01 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,20 @@ char	*check_for_end(char **saver, char *line)
 
 char	*read_file(int fd, size_t buff_size, char **saver)
 {
-	int		found_nl;
-	int		end_of_file;
-	char	*buff;
-	char	*line;
+	int				found_nl;
+	static int		end_of_file = -1;
+	char			*buff;
+	char			*line;
 
 	found_nl = 0;
-	end_of_file = -1;
 	while (found_nl != 1 && end_of_file != 0)
 	{
 		buff = init_buf(buff_size);
 		if (buff == NULL)
 			return (free_all(saver, buff));
 		end_of_file = read(fd, buff, buff_size);
+		if (end_of_file < 0)
+			return (free_all(saver, buff));
 		found_nl = check_nl(buff);
 		if (end_of_file != 0)
 		{
@@ -78,14 +79,13 @@ char	*read_file(int fd, size_t buff_size, char **saver)
 		else
 			free(buff);
 	}
-	line = NULL;
-	return (check_for_end(saver, line));
+	return (line = NULL, end_of_file = -1, check_for_end(saver, line));
 }
 
 char	*get_next_line(int fd)
 {
 	size_t		buff_s;
-	static char	*saver;
+	static char	*saver = NULL;
 	char		*line;
 
 	buff_s = BUFFER_SIZE;
