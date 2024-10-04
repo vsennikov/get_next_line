@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/10/04 13:17:44 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:36:29 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*substract_line_from_saver(char **saver, char *line)
 	return (line);
 }
 
-char	*rread_file(int found_nl, size_t buff_size, char **saver, int fd)
+char	*read_file(int found_nl, size_t buff_size, char **saver, int fd)
 {
 	int		end_of_file;
 	char	*buff;
@@ -82,35 +82,6 @@ char	*rread_file(int found_nl, size_t buff_size, char **saver, int fd)
 	return (line = NULL, substract_line_from_saver(saver, line));
 }
 
-// char	*read_file(int fd, size_t buff_size, char **saver)
-// {
-// 	int				found_nl;
-// 	char			*line;
-
-// 	if (*saver != NULL)
-// 		found_nl = check_nl(*saver);
-// 	return (rread_file(found_nl, buff_size, saver, fd));
-	// while (found_nl != 1 && end_of_file != 0)
-	// {
-	// 	buff = init_buf(buff_size);
-	// 	if (buff == NULL)
-	// 		return (free_all(saver, buff));
-	// 	end_of_file = read(fd, buff, buff_size);
-	// 	if (end_of_file < 0)
-	// 		return (free_all(saver, buff));
-	// 	found_nl = check_nl(buff);
-	// 	if (end_of_file != 0)
-	// 	{
-	// 		*saver = transfer_str(*saver, buff, end_of_file);
-	// 		if (*saver == NULL)
-	// 			return (free_all(saver, buff));
-	// 	}
-	// 	else
-	// 		free(buff);
-	// }
-	// return (line = NULL, end_of_file = -1, substract_line_from_saver(saver, line));
-// }
-
 char	*get_next_line(int fd)
 {
 	size_t		buff_s;
@@ -132,8 +103,7 @@ char	*get_next_line(int fd)
 	found_nl = 0;
 	if (saver != NULL)
 		found_nl = check_nl(saver);
-	line = rread_file(found_nl, buff_s, &saver, fd);
-	// line = read_file(fd, buff_s, &saver);
+	line = read_file(found_nl, buff_s, &saver, fd);
 	if (line != NULL && line[0] == '\0')
 		return (free_all(&saver, line));
 	else if (line == NULL)
