@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/10/04 13:36:29 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:41:03 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*read_file(int found_nl, size_t buff_size, char **saver, int fd)
 		else
 			free(buff);
 	}
-	return (line = NULL, substract_line_from_saver(saver, line));
+	return (substract_line_from_saver(saver, line));
 }
 
 char	*get_next_line(int fd)
