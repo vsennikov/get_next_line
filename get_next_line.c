@@ -6,7 +6,7 @@
 /*   By: vsenniko <vsenniko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:10:49 by vsenniko          #+#    #+#             */
-/*   Updated: 2024/10/04 13:41:03 by vsenniko         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:05:31 by vsenniko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*substract_line_from_saver(char **saver, char *line)
 	return (line);
 }
 
-char	*read_file(int found_nl, size_t buff_size, char **saver, int fd)
+char	*read_file(int found_nl, char **saver, int fd)
 {
 	int		end_of_file;
 	char	*buff;
@@ -63,10 +63,10 @@ char	*read_file(int found_nl, size_t buff_size, char **saver, int fd)
 	end_of_file = -1;
 	while (found_nl != 1 && end_of_file != 0)
 	{
-		buff = init_buf(buff_size);
+		buff = init_buf(BUFFER_SIZE);
 		if (buff == NULL)
 			return (free_all(saver, buff));
-		end_of_file = read(fd, buff, buff_size);
+		end_of_file = read(fd, buff, BUFFER_SIZE);
 		if (end_of_file < 0)
 			return (free_all(saver, buff));
 		found_nl = check_nl(buff);
@@ -84,14 +84,12 @@ char	*read_file(int found_nl, size_t buff_size, char **saver, int fd)
 
 char	*get_next_line(int fd)
 {
-	size_t		buff_s;
 	static char	*saver = NULL;
 	char		*line;
 	int			found_nl;
 
-	buff_s = BUFFER_SIZE;
 	line = NULL;
-	if (fd < 0 || buff_s == 0 || read(fd, line, 0) == -1)
+	if (fd < 0 || BUFFER_SIZE == 0)
 	{
 		if (saver != NULL)
 		{
@@ -101,9 +99,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	found_nl = 0;
-	if (saver != NULL)
-		found_nl = check_nl(saver);
-	line = read_file(found_nl, buff_s, &saver, fd);
+	line = read_file(found_nl, &saver, fd);
 	if (line != NULL && line[0] == '\0')
 		return (free_all(&saver, line));
 	else if (line == NULL)
