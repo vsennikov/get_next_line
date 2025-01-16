@@ -2,23 +2,6 @@
 
 This project provides a function `get_next_line` that reads a line from a file descriptor. It is designed to handle reading from a file efficiently, even when the file is large or the lines are of varying lengths.
 
-## Functions
-
-### [`get_next_line.c`](get_next_line.c)
-
-- `void *free_all(char **saver, char *buffer)`: Frees allocated memory for the saver and/or buffer.
-- `char *substract_line_from_saver(char **saver, char *line)`: Extracts a line from the saver and reorganizes the saver.
-- `char *read_file(int found_nl, char **saver, int fd)`: Reads from the file descriptor and updates the saver.
-- `char *get_next_line(int fd)`: Main function to get the next line from the file descriptor.
-
-### [`get_next_line_utils.c`](get_next_line_utils.c)
-
-- `int check_nl(char *buff)`: Checks if the buffer contains a newline character.
-- `char *init_buf(size_t buff_size)`: Initializes a buffer of given size.
-- `char *transfer_str(char *old, char *buff, size_t buff_size)`: Transfers content from the buffer to the saver.
-- `char *return_line(char *saver)`: Returns a line from the saver.
-- `char *reorganise_saver(char *saver)`: Reorganizes the saver after extracting a line.
-
 ## Usage
 
 To use the `get_next_line` function, include the [`get_next_line.h`](get_next_line.h) header in your source file and link against the compiled object files of [`get_next_line.c`](get_next_line.c) and [`get_next_line_utils.c`](get_next_line_utils.c).
